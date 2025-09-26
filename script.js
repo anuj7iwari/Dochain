@@ -1,10 +1,32 @@
-
 document.addEventListener('DOMContentLoaded', () => {
+    initializeScripts();
+});
+
+function initializeScripts() {
+    
+    try {
+        if (localStorage.get("__framer_force_showing_editorbar_since")) {
+            const link = document.createElement("link");
+            link.rel = "modulepreload";
+            link.href = "https://framer.com/edit/init.mjs";
+            document.head.appendChild(link);
+        }
+    } catch (e) {}
+
+    
+    const eventScript = document.createElement('script');
+    eventScript.async = true;
+    eventScript.src = "https://events.framer.com/script?v=2";
+    eventScript.dataset.fid = "1bffad171fa188667323a9997db59f683dd7719bd093dfe2b476540bc2ac438c";
+    eventScript.dataset.noNt = true;
+    document.body.prepend(eventScript);
+
     initializeLinkHandlers();
     initializeImageResizeObserver();
     preserveUrlParameters();
     initializeFramerAnimator();
-});
+}
+
 
 
 function initializeLinkHandlers() {
@@ -25,13 +47,10 @@ function initializeLinkHandlers() {
         }
         event.preventDefault();
         event.stopPropagation();
-        
         const href = this.getAttribute("href");
         if (!href) return;
-        
         const isMac = /Mac|iPod|iPhone|iPad/u.test(navigator.userAgent);
         const newTab = isMac ? event.metaKey : event.ctrlKey;
-        
         if (newTab) {
             openLink(href, "", "_blank");
         } else {
@@ -49,9 +68,7 @@ function initializeLinkHandlers() {
         event.preventDefault();
         event.stopPropagation();
         const href = this.getAttribute("href");
-        if (href) {
-            openLink(href, "", "_blank");
-        }
+        if (href) openLink(href, "", "_blank");
     }
 
     function onKeyDown(event) {
@@ -89,7 +106,6 @@ function initializeImageResizeObserver() {
         }
     }
     window.__framer_onRewriteBreakpoints = rewriteImageSizes;
-    rewriteImageSizes();
 }
 
 
@@ -110,13 +126,12 @@ function preserveUrlParameters() {
                 newParams.append(key, value);
             }
         }
-
         const newQueryString = newParams.toString();
         return newQueryString ? `${basePath}?${newQueryString}${hash}` : `${path}${hash}`;
     }
 
     if (window.location.search && !/bot|-google|google-|yandex|ia_archiver|crawl|spider/iu.test(navigator.userAgent)) {
-        const internalLinksSelector = 'div#main a[href^="#"], div#main a[href^="/"], div#main a[href^="."], div#main a[data-framer-preserve-params]';
+        const internalLinksSelector = 'div#main a[href^="#"],div#main a[href^="/"],div#main a[href^="."],div#main a[data-framer-preserve-params]';
         const linksToUpdate = document.querySelectorAll(internalLinksSelector);
         
         for (let link of linksToUpdate) {
@@ -126,10 +141,9 @@ function preserveUrlParameters() {
     }
 }
 
-/**
- * framer anime module
- */
+
 function initializeFramerAnimator() {
+    const animator = window.animator; 
     if (typeof animator === 'undefined') return;
 
     function runAppearAnimations() {
@@ -167,3 +181,4 @@ function initializeFramerAnimator() {
 
     runAppearAnimations();
 }
+
