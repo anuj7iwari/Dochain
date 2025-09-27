@@ -52,15 +52,11 @@ body,
     -moz-osx-font-smoothing: grayscale
 }
 
+html body {
+    background: var(--token-a5a397af-bb8d-4024-9287-ba201fae94e5, rgb(255, 250, 245));
+}
+
 /* ... (rest of the minified CSS from your file) ... */
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain
-}
-
-.lenis.lenis-stopped {
-    overflow: hidden
-}
 
 .lenis.lenis-scrolling iframe {
     pointer-events: none
@@ -69,4 +65,3 @@ body,
 #__framer-badge-container {
      display: none !important;
 }
-        
